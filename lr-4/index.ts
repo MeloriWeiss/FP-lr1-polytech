@@ -4,7 +4,7 @@ let buttonsContainer: HTMLDivElement;
 
 let currentInput: string = '0';
 let firstOperand: number | null = null;
-let operator: string | null = null;
+let operator: Operation | null = null;
 
 const operations: Record<Operation, (a: number, b?: number) => number> = {
     add: (a, b) => a + b,
@@ -22,6 +22,13 @@ window.addEventListener('DOMContentLoaded', () => init());
 const init = (): void => {
     getElements();
     addEventListeners();
+};
+
+const createOperation = (operation: Operation) => {
+    return (a: number, b?: number): number => {
+        const op = operations[operation];
+        return op(a, b);
+    };
 };
 
 const getElements = (): void => {
@@ -68,9 +75,9 @@ const calculate = (): void => {
         let result: number;
 
         if (operator === 'sqrt') {
-            result = operations['sqrt'](firstOperand);
+            result = createOperation('sqrt')(firstOperand);
         } else {
-            result = operations[operator](firstOperand, secondOperand);
+            result = createOperation(operator)(firstOperand, secondOperand);
         }
 
         currentInput = formatNumber(result);

@@ -17,6 +17,12 @@ var init = function () {
     getElements();
     addEventListeners();
 };
+var createOperation = function (operation) {
+    return function (a, b) {
+        var op = operations[operation];
+        return op(a, b);
+    };
+};
 var getElements = function () {
     display = document.getElementById('display');
     buttonsContainer = document.getElementById('buttons');
@@ -55,10 +61,10 @@ var calculate = function () {
         var secondOperand = parseFloat(currentInput);
         var result = void 0;
         if (operator === 'sqrt') {
-            result = operations['sqrt'](firstOperand);
+            result = createOperation('sqrt')(firstOperand);
         }
         else {
-            result = operations[operator](firstOperand, secondOperand);
+            result = createOperation(operator)(firstOperand, secondOperand);
         }
         currentInput = formatNumber(result);
         firstOperand = null;
